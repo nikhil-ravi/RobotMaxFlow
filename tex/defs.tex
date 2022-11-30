@@ -1,0 +1,129 @@
+\bibliographystyle{plainnat}
+
+%\usepackage{xspace}
+%\usepackage{beamerthemesplit} %Activate for custom appearance
+
+\usepackage{xcolor} %for color
+\usepackage{xmpmulti}
+%\usetheme{Air}
+\usefonttheme{professionalfonts}
+\usepackage{thumbpdf}
+\usepackage{wasysym}
+\setbeamersize{text margin left=6mm}
+\setbeamersize{text margin right=6mm}
+\usepackage{upgreek}
+\usepackage{ucs}
+%\usepackage[utf8]{inputenc}
+\usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps,pgfshade}
+\usepackage{verbatim}
+\usepackage{empheq}
+\newcommand*\widefbox[1]{\fbox{\hspace{2em}#1\hspace{2em}}}
+
+\definecolor{darkblue}{rgb}{0,0,0.7}
+\definecolor{dred}{rgb}{0.8,0.25,0.2}
+
+\def\blue{\color{blue}}
+\def\red{\color{dred}}
+\def\darkblue{\color{darkblue}}
+
+
+\setbeamertemplate{blocks}[rounded][shadow=true]
+\setbeamercolor{block title}{fg=white,bg=dred}
+\setbeamercolor{block body}{fg=black,bg=gray!5}
+
+
+%Sergio's %%%%%%%%%%
+
+%\usetheme{Boadilla}
+%\usecolortheme{seahorse}
+%\usefonttheme{professionalfonts}
+%\usepackage{flashmovie}
+
+%\usepackage[english]{babel}
+%\usepackage[utf8x]{inputenc}
+
+%\usepackage[latin1]{inputenc}
+
+%\usepackage{times}
+
+%\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{epsfig,color,cases,url,soul}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{amsmath,amssymb,bm,mathtools}
+%\usepackage{algorithmicx,algpseudocode,algpascal}
+\usepackage{xmpmulti,url,tikz}
+%\usepackage{multimedia}
+%\usepackage{fancyhdr}
+%\usepackage{beamerouterthemesmoothbars}
+% outer themes include default, infolines, miniframes, shadow, sidebar, smoothbars, smoothtree, split, tree
+%\useoutertheme[subsection=false]{smoothbars}
+%\useoutertheme[subsection=false,footline=authorinstitute]{smoothbars}
+%\useoutertheme{smoothbars}
+
+\setbeamercovered{transparent}
+
+\definecolor{hughesblue}{rgb}{.9,.9,1} %A blue I like to use for highlighting, matches Hughes Hallet's book
+
+\definecolor{orange}{rgb}{.953 ,.502 ,.04}
+\setul{0.4ex}{0.2ex}
+%\setulcolor{orange}
+\setulcolor{pacificblue}
+
+\usepackage{blindtext}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+}
+
+\makeatletter
+\newcommand\SoulColor{%
+    \let\set@color\beamerorig@set@color
+    \let\reset@color\beamerorig@reset@color}
+\makeatother
+
+
+\newcommand{\Integer}{\mathbb{Z}}
+\newcommand{\Natural}{\mathbb{Z}_{\geq 0}}
+\newcommand{\Naturalstar}{\mathbb{Z}_{> 0}}
+\newcommand{\Real}{\mathbb{R}}
+\newcommand{\Complex}{\mathbb{C}}
+\newcommand{\hilbert}{\mathcal{H}}
+\newcommand{\BigHilbert}{\bm{\mathcal{H}}}
+\newcommand{\innprod}[2]{\langle{#1},{#2}\rangle}
+\newcommand{\ginnprod}[2]{\langle\!\langle{#1},{#2}\rangle\!\rangle}
+\newcommand{\norm}[1]{\|{#1}\|}
+\newcommand{\gnorm}[1]{|\!|\!|{#1}|\!|\!|}
+\newcommand{\expect}{\mathbb{E}}
+
+\newcommand{\gr}{\selectlanguage{greek}}
+
+%\newcommand{\red}{\color{myred}}
+%\newcommand{\blue}{\color{myblue}}
+%\newcommand{\black}{\color{myblack}}
+
+\DeclareMathOperator{\argmin}{arg\,min}
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\relinterior}{ri}
+\DeclareMathOperator{\interior}{int}
+\DeclareMathOperator{\boundary}{bdry}
+\DeclareMathOperator{\linspan}{span}
+\DeclareMathOperator{\trace}{trace}
+\DeclareMathOperator{\vect}{vect}
+\DeclareMathOperator{\modulo}{mod}
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\sign}{sgn}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\lev}{lev_{\leq 0}}
+\DeclareMathOperator{\leva}{lev_{\leq\alpha}}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\sinc}{sinc}
+\DeclareMathOperator{\BP}{BP}
+\DeclareMathOperator{\abs}{abs}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\graph}{gph}

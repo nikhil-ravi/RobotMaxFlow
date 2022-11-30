@@ -1,0 +1,89 @@
+\documentclass[11pt,draftclsnofoot,onecolumn]{IEEEtran}
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+\usepackage[english]{babel}
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+\usepackage{graphicx,algorithm,algorithmic,bm,amsmath,amsthm,amssymb,color,hyperref,cite,tcolorbox,verbatimbox}
+%\input{defs}
+% Useful packages
+
+
+
+\begin{document}
+\title{Notes on decentralized coordination of multi-robot networks}
+%\author{Anna Scaglione}
+\maketitle
+
+
+\section{Problem Formulation}
+In the model there is a set of $N$ robots $\mathcal{V}$, whose state vector is $\bm s_i=[\bm q_i,\theta_i]$, where $\bm q_i=[x_i,y_i]$ is the position of the robot on a plane and $\theta_i$ the orientation, and a set of $M\geq N$ targets $\mathcal{M}$ with positions $\bm x_j$. The state depends on the control signal that consists of the velocity and orientation of the robot $\bm u_i=[v_i,\theta_i]$, both bounded, and can be represented in discrete time as follows:
+\begin{equation}
+    \bm s_i(k+1)=\bm f(\bm s_i(k),\bm u_i(k)),~~|\bm u_i(k)|\leq \bm b, \bm a_1\leq\bm s_i(k+1)\leq \bm a_2
+\end{equation}
+which represent the individual robot's constraints, $\chi_i(k)=[\bm s_i(k),\bm u_i(k)]\in {\cal X}_i$.
+
+The mobile robots know their position and through their cameras, for those that fall in their field ${\cal S}_i(k)$ of view, they can compute an estimate $\hat{
+\bm x}_{ij}(k)$ of the position and velocity of the targets $\bm x_j(k)=[x_j,y_j,v_{xj},v_{yj}]$, relative to a reference system centered at the robot $i$ such that $\bm x_j(k)\in\mathcal{S}_i(k)$.
+The targets are assumed to move in the reference system centered at the robot according to linear Gaussian dynamics and through sensors the robots' observation is also linear and corrupted by Gaussian noise:
+\begin{align}
+        \bm x_j(k+1)&=\bm F\bm x_j(k) +\bm w(k),~~~
+    \bm w(k)\sim \mathcal{N}(\bm 0,\bm Q),\\
+    \bm z_{i,j}(k)&=
+    \begin{cases}
+        \bm H \bm x_j(k)+\bm v &~ \bm x_j(k)\in {\cal S}_i(k)\\
+        \bm 0 &\mbox{else}
+    \end{cases}
+\end{align}
+where $\bm H=[\bm I_2,\bm 0_2]$ means that the sensors only observe a noisy position but not the velocity.  Given the model, the Kalman filter provides the optimum estimate of the future state of the robots $\hat{\bm x}_{ij}(k+1)$. 
+The robots can communicate through a meshed network represented by the graph $\mathcal{G}=(\mathcal{V},\mathcal{E})$ that forms a strongly connected graph and that can help them coordinate their trajectories in pursuit of the task of monitoring the targets. 
+The goal is to assign to each robot a distinct set of targets and achieve a consensus on the division of tasks. This is an integer problem, and it is not a matching problem because a robot will have to pursue multiple targets, since the targets outnumber the robots. However, assuming that each robot can at most pursue $P$ targets, we can build a model in which individual robots are operating as equivalently $P$ of them, so that the total $PN\geq M$ in general, transforming the problem into a matching problem. 
+
+\subsection{Robot assignment through maximum utility maximization}
+Suppose one has a worker/job assignment problem, with edge weight $w_{nj}$ is the {\it competence} of the worker $n $ to perform the job $j$. The problem of finding a matching that minimizes the cost or maximizes the average competency is the so-called {\it linear sum assignment problem}; its integer formulation is as follows:
+\begin{align}
+\max_{\bm c} &~\bm w^\top \bm c\\
+\mbox{subject to}&~\bm c\leq \bm 1,\\ 
+&~\bm B^{\text{u}}\bm c\leq 1,\\  
+&~c_i \in \{0,1\}
+\end{align}
+where $c_i \in \{0,1\}$ is the integrality constraint, $\bm B^{\text{u}}$ is the unoriented incidence matrix of the bipartite graph and the constraint $\bm B^{\text{u}}\bm c\leq 1$ ensures that at most one edge is picked for each node. 
+It is well known that the trick to remove the integrality constraints is to introduce two fictitious nodes, a source $a$ connected to the workers and a destination $b$ connected to the jobs and solve the following problem:
+\begin{align}
+\max_{\bm c} &~\bm w^\top \bm c\\
+\mbox{subject to}&~~\bm 0\leq \bm c\leq \bm 1,\\ 
+&~\bm B^{\text{u}}\bm c\leq 1,\\  
+    &~[\bm B\bm c]_a=-[\bm B\bm c]_b=\min(N, M),\\
+      &~[\bm B\bm c]_u=0,~~u\neq \{a,b\}  
+\end{align}
+which, if the weights are integer numbers, has a solution that is such that $c_i \in \{0,1\}$, even though the constraint has not been explicitly imposed. 
+
+An estimate of the ease for the robot $i$ to pursue the target $j$, which we call utility, can be based on estimate of the target minimum future relative position, for instance: 
+\begin{equation}
+    U_{ij}(k) = 
+    \begin{cases}
+        \frac{1}{\min_{\bm u_i(k)} \|\hat{\bm x}_{ij}(k+1)\|},&~~\hat{\bm x}_{ij}(k)\in \mathcal{S}_i(k)\\
+        0 &\mbox{else}
+    \end{cases}. 
+\end{equation}
+In order to solve the matching problem the weights have to be integer values we can define the weight:
+\begin{equation}
+    w_{ij}(k)=\lceil U_{ij}(k) \kappa\rceil
+\end{equation}
+where $\kappa$ is a large enough constant. 
+Here we do not want each robot to only have one target to follow, so the idea is to create for each robot an allocation vector $\bm c_i, i\in {\cal V}$ of size $P$ chosen so that the expected $M\leq NP$. Let $\bm c=[\bm c_1^\top,\ldots,\bm c_N^\top]^\top$,  the problem formulation is:
+\begin{align}
+\max_{\bm c_i} &~\sum_{i\in {\cal V}}\bm w_i^\top \bm c_i\\
+\mbox{subject to}&~\bm 0\leq \bm c_i\leq \bm 1,~~ i\in {\cal V}\\ 
+&~\bm B^{\text{u}}\bm c\leq \bm 1,\\  
+    &~[\bm B\bm c]_a=-[\bm B\bm c]_b=M,\\
+      &~[\bm B\bm c]_u=0,~~u\neq \{a,b\}  
+\end{align}
+
+
+
+
+% \bibliographystyle{alpha}
+% \bibliography{sample}
+
+\end{document}
